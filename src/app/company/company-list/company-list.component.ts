@@ -8,14 +8,12 @@ import { ICompany } from '../icompany';
   templateUrl: './company-list.component.html',
   styleUrls: ['./company-list.component.scss']
 })
-export class CompanyListComponent implements OnInit, OnDestroy {
+export class CompanyListComponent implements OnInit {
 
   companies$: Observable<ICompany[]> = of([]);
-  subscription: Subscription | undefined;
 
   constructor(private companyService: CompanyService) {
   }
-
 
   ngOnInit(): void {
     this.getCompanies();
@@ -23,11 +21,13 @@ export class CompanyListComponent implements OnInit, OnDestroy {
 
   getCompanies() {
     this.companies$ = this.companyService.getCompanies();
-    this.subscription = this.companies$.subscribe(companies => {
-      console.log('subscribing to our own observable!');
+  }
+
+  deleteCompany(companyId: number) {
+    this.companyService.deleteCompany(companyId)
+    .subscribe(() => {
+      this.getCompanies();
     });
   }
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
-  }
+
 }

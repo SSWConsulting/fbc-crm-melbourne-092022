@@ -17,13 +17,19 @@ export class CompanyService {
   getCompanies(): Observable<ICompany[]> {
     return this.http.get<ICompany[]>(`${this.API_BASE }/company`)
     .pipe(
-      catchError(this.handleError)
+      catchError(this.handleError<ICompany[]>)
       );
   }
+  deleteCompany(companyId: number): Observable<ICompany> {
+    return this.http.delete<ICompany>(`${this.API_BASE }/company/${companyId}`)
+    .pipe(
+      catchError(this.handleError<ICompany>)
+    );
+  }
 
-  handleError(e: any): Observable<ICompany[]> {
+  handleError<T>(e: any): Observable<T> {
     // log the error
     console.error('CompanyService.handleError, ', e);
-    return of([]);
+    return new Observable<T>();
   }
 }

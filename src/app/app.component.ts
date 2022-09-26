@@ -7,9 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Melbourne 2022';
-
-  textboxChanged(event: any){
-    console.log(event);
-    this.title = event.target.value;
-  }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CompanyService } from '../company.service';
 import { ICompany } from '../icompany';
 
 @Component({
@@ -9,7 +10,8 @@ import { ICompany } from '../icompany';
 export class CompanyListComponent implements OnInit {
 
   companies: ICompany[] = [];
-  constructor() {
+
+  constructor(private companyService: CompanyService) {
 
   }
 
@@ -18,10 +20,7 @@ export class CompanyListComponent implements OnInit {
   }
 
   getCompanies() {
-    this.companies = [
-      { name: 'company 1', email: 'one@test.com', phone: 111 },
-      { name: 'company 2', email: 'two@test.com', phone: 222 }
-    ];
+    this.companies = this.companyService.getCompanies();
   }
 
 }

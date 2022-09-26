@@ -1,19 +1,29 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
 import { ICompany } from './icompany';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompanyService {
+  API_BASE = 'https://firebootcamp-crm-api.azurewebsites.net/api';
 
-  constructor() {
+  constructor(private http: HttpClient) {
 
   }
 
-  getCompanies(): ICompany[] {
-    return [
-      { name: 'company 1', email: 'one@test.com', phone: 111 },
-      { name: 'company 2', email: 'two@test.com', phone: 222 }
-    ];
+  getCompanies(): Observable<ICompany[]> {
+    return this.http.get<ICompany[]>(`${this.API_BASE }/company`)
+    .pipe(
+      catchError(this.handleError)
+      );
+  }
+
+  handleError(e: any): Observable<ICompany[]> {
+    // log the error
+    console.error('CompanyService.handleError, ', e);
+    return of([]);
   }
 }

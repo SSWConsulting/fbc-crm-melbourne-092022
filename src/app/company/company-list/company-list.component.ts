@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, of, Subscription } from 'rxjs';
 import { CompanyService } from '../company.service';
 import { ICompany } from '../icompany';
 
@@ -7,20 +8,26 @@ import { ICompany } from '../icompany';
   templateUrl: './company-list.component.html',
   styleUrls: ['./company-list.component.scss']
 })
-export class CompanyListComponent implements OnInit {
+export class CompanyListComponent implements OnInit, OnDestroy {
 
-  companies: ICompany[] = [];
+  companies$: Observable<ICompany[]> = of([]);
+  subscription: Subscription | undefined;
 
   constructor(private companyService: CompanyService) {
-
   }
+
 
   ngOnInit(): void {
     this.getCompanies();
   }
 
   getCompanies() {
-    this.companies = this.companyService.getCompanies();
+    this.companies$ = this.companyService.getCompanies();
+    this.subscription = this.companies$.subscribe(companies => {
+      console.log('subscribing to our own observable!');
+    });
   }
-
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
+  }
 }

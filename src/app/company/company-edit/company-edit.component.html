@@ -18,13 +18,17 @@
     <input formControlName="phone" name="phone" type="text" class="form-control">
   </div>
 
+  <div class="alert alert-danger" *ngIf="companyForm.get('phone')?.hasError('required')">
+    Phone number is mandatory
+  </div>
+
   <div class="form-group">
     <label> Phone number required </label>
     <input [checked]="!!companyForm.get('phoneRequired')?.value" formControlName="phoneRequired" type="checkbox">
   </div>
 
   <button class="btn btn-primary"
-   (click)="saveChanges( )"
+   (click)="saveChanges()"
    [disabled]="companyForm.invalid"
    > Submit </button>
 

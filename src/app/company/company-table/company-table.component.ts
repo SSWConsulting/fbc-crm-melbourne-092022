@@ -24,8 +24,4 @@ export class CompanyTableComponent implements OnInit {
   deleteCompany(companyId: number) {
     this.deleteButtonClicked.emit(companyId);
   }
-
-  logChanges(){
-    console.log("CHANGES !!!");
-  }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
 import { CompanyService } from '../company.service';
 import { ICompany } from '../icompany';
 
@@ -29,42 +30,42 @@ export class CompanyEditComponent implements OnInit {
     this.isNewCompany = !this.companyId;
 
     if (!this.isNewCompany) {
-      // load company details
+      this.companyService.getCompany(this.companyId)
+        .subscribe(company => {
+          this.companyForm.patchValue(company)
+        });
     }
-
-    // this.companyForm = new FormGroup({
-    //   name: new FormControl(),
-    //   email: new FormControl('@ssw.com.au', [Validators.email, Validators.required]),
-    //   phone: new FormControl(),
-    //   contacts: new FormArray([]),
-    //   addressDetails: new FormGroup({
-    //     streetName: new FormControl(),
-    //     streetNumber: new FormControl()
-    //   })
-    // });
 
     this.companyForm = this.formBuilder.group({
       name: ['', Validators.required],
-      phone: [],
+      phone: ['', Validators.required],
       email: ['info@ssw.com.au'],
-      phoneRequired: [true]
+      phoneRequired: [true],
     });
 
-    this.companyForm.get('name')?.valueChanges.subscribe(
-      x => console.log(x)
+    this.companyForm.get('phoneRequired')?.valueChanges.subscribe(
+      checkboxValue => {
+        if (checkboxValue) {
+          this.companyForm.get('phone')?.setValidators(Validators.required)
+        } else {
+          this.companyForm.get('phone')?.removeValidators(Validators.required)
+        }
+        this.companyForm.get('phone')?.updateValueAndValidity()
+      }
     );
-
-    // this.companyForm.controls['name'].setValue('SSW', { triggerEvent: true });
-    // this.companyForm.get('name')?.setValue('SSW');
-
   }
 
   saveChanges() {
+    let company: ICompany = { ...this.companyForm.value, id: this.companyId };
+    let action$: Observable<ICompany>;
 
-    console.log(this.companyForm)
-    // let newCompany: ICompany = this.companyForm.value;
-    // this.companyService.addCompany(newCompany).subscribe(company => {
-    //   this.router.navigateByUrl('/company/list')
-    // });
+    if (this.isNewCompany) {
+      this.companyService.addCompany(company);
+    } else {
+      this.companyService.updateCompany(company);
+    }
+
+    this.router.navigateByUrl('/company/list');
+    // this.router.navigate(['/company', 'list']); // strictly equivalent
   }
 }

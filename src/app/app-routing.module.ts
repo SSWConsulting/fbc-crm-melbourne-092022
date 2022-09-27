@@ -1,18 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CompanyEditComponent } from './company/company-edit/company-edit.component';
 import { CompanyListComponent } from './company/company-list/company-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'company/list', pathMatch: 'full' },
-  // Method A
   { path: 'company/list', component: CompanyListComponent },
-
-  // Method B
-  // { path: 'company', children:
-    // [
-      // { path: 'list', component: CompanyListComponent }
-    // ]
-  // }
+  { path: 'company/edit/:id', component: CompanyEditComponent },
+  { path: 'company/add', component: CompanyEditComponent },
 ];
 
 @NgModule({

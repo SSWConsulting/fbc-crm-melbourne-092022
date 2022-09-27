@@ -1,4 +1,8 @@
-<h1>Company list</h1>
+<h1>Company list
+  <button class="btn btn-success pull-right" [routerLink]="['/company/add']"> Add </button>
+</h1>
+
+
 
 <fbc-company-table
   [companies]="(companies$ | async) ?? []"

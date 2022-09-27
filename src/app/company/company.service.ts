@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { catchError, finalize, tap } from 'rxjs/operators';
+import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { ICompany } from './icompany';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class CompanyService {
     this.http.get<ICompany[]>(`${this.API_BASE}/company`)
       .subscribe((companies: ICompany[]) => {
         this.companies$.next(companies);
-      })
+      });
   }
 
   getCompanies(): Observable<ICompany[]> {

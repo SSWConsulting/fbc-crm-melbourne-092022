@@ -20,7 +20,7 @@ export class CompanyService {
     this.http.get<ICompany[]>(`${this.API_BASE}/company`)
       .subscribe((companies: ICompany[]) => {
         this.companies$.next(companies);
-      })
+      });
   }
 
   getCompanies(): Observable<ICompany[]> {
